@@ -138,37 +138,61 @@
             .industry-select { grid-template-columns: 1fr; }
         }
 
-        /* ─── Pätevyys-checkboxlista ─────────────────────────────────── */
+        /* ─── Pätevyys-accordion ─────────────────────────────────────── */
         .cert-hint { font-size: 0.8rem; font-weight: 400; color: #999; margin-left: 0.4rem; }
-        .cert-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.85rem;
+        .cert-accordion {
+            border: 1px solid #dde2e8;
+            border-radius: 10px;
+            overflow: hidden;
             margin-top: 0.6rem;
         }
-        .cert-category {
+        .cert-acc-item { border-bottom: 1px solid #dde2e8; }
+        .cert-acc-item:last-child { border-bottom: none; }
+        .cert-acc-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.75rem 1rem;
             background: #f8f9fa;
-            border: 1px solid #e2e6ea;
-            border-radius: 10px;
-            padding: 0.9rem 1rem;
-        }
-        .cert-cat-title {
-            font-size: 0.78rem;
-            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.9rem;
+            font-weight: 600;
             color: #1e3a5f;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.6rem;
-            padding-bottom: 0.45rem;
-            border-bottom: 1px solid #dee2e6;
+            transition: background 0.15s;
         }
+        .cert-acc-header:hover,
+        .cert-acc-header.open { background: #eef2fa; }
+        .cert-acc-title { flex: 1; }
+        .cert-acc-badge {
+            display: none;
+            background: #1e3a5f;
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.1rem 0.5rem;
+            border-radius: 20px;
+            min-width: 22px;
+            text-align: center;
+        }
+        .cert-acc-badge.visible { display: inline-block; }
+        .cert-acc-arrow { font-size: 0.65rem; color: #aaa; transition: transform 0.2s; }
+        .cert-acc-header.open .cert-acc-arrow { transform: rotate(180deg); }
+        .cert-acc-body {
+            display: none;
+            padding: 0.5rem 1.1rem 0.8rem;
+            background: #fff;
+        }
+        .cert-acc-body.open { display: block; }
         .cert-item {
             display: flex;
             align-items: flex-start;
-            gap: 0.45rem;
-            padding: 0.28rem 0;
+            gap: 0.5rem;
+            padding: 0.32rem 0;
             cursor: pointer;
-            font-size: 0.87rem;
+            font-size: 0.88rem;
             color: #444;
             line-height: 1.35;
         }
@@ -181,7 +205,6 @@
             cursor: pointer;
         }
         .cert-item:hover span { color: #1e3a5f; }
-        @media (max-width: 600px) { .cert-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body class="order-page">
@@ -460,33 +483,62 @@
 
                         <div class="form-group">
                             <label>Pätevyydet ja sertifikaatit <span class="cert-hint">– valitse kaikki mitä teillä on</span></label>
-                            <div class="cert-grid">
-                                <div class="cert-category">
-                                    <div class="cert-cat-title">💰 Luottoluokitukset</div>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Suomen Vahvimmat AAA"><span>Suomen Vahvimmat AAA (Asiakastieto)</span></label>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Suomen Vahvimmat AA"><span>Suomen Vahvimmat AA+ tai AA</span></label>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Kauppalehti Menestyjä"><span>Kauppalehti Menestyjä-sertifikaatti</span></label>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="D&amp;B Rating AAA/AA"><span>Dun &amp; Bradstreet (D&amp;B) AAA/AA</span></label>
+                            <div class="cert-accordion">
+
+                                <div class="cert-acc-item">
+                                    <button type="button" class="cert-acc-header" onclick="toggleCertCat(this)">
+                                        <span class="cert-acc-title">💰 Luottoluokitukset</span>
+                                        <span class="cert-acc-badge">0</span>
+                                        <span class="cert-acc-arrow">▼</span>
+                                    </button>
+                                    <div class="cert-acc-body">
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Suomen Vahvimmat AAA"><span>Suomen Vahvimmat AAA (Asiakastieto)</span></label>
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Suomen Vahvimmat AA"><span>Suomen Vahvimmat AA+ tai AA</span></label>
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Kauppalehti Menestyjä"><span>Kauppalehti Menestyjä-sertifikaatti</span></label>
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="D&amp;B Rating AAA/AA"><span>Dun &amp; Bradstreet (D&amp;B) AAA/AA</span></label>
+                                    </div>
                                 </div>
-                                <div class="cert-category">
-                                    <div class="cert-cat-title">⚡ S-pätevyydet (sähkö)</div>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="S1-sähköpätevyys"><span>S1 – kaikki sähkötyöt</span></label>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="S2-sähköpätevyys"><span>S2 – kiinteistöjen sähkötyöt</span></label>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="S3-sähköpätevyys"><span>S3 – sähkölaitteiden korjaus</span></label>
+
+                                <div class="cert-acc-item">
+                                    <button type="button" class="cert-acc-header" onclick="toggleCertCat(this)">
+                                        <span class="cert-acc-title">⚡ S-pätevyydet (sähkö)</span>
+                                        <span class="cert-acc-badge">0</span>
+                                        <span class="cert-acc-arrow">▼</span>
+                                    </button>
+                                    <div class="cert-acc-body">
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="S1-sähköpätevyys"><span>S1 – kaikki sähkötyöt</span></label>
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="S2-sähköpätevyys"><span>S2 – kiinteistöjen sähkötyöt</span></label>
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="S3-sähköpätevyys"><span>S3 – sähkölaitteiden korjaus</span></label>
+                                    </div>
                                 </div>
-                                <div class="cert-category">
-                                    <div class="cert-cat-title">✅ Laatu ja hallinto</div>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Luotettava Kumppani (Vastuu Group)"><span>Luotettava Kumppani (Vastuu Group)</span></label>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="RALA-pätevyys"><span>RALA-pätevyys</span></label>
+
+                                <div class="cert-acc-item">
+                                    <button type="button" class="cert-acc-header" onclick="toggleCertCat(this)">
+                                        <span class="cert-acc-title">✅ Laatu ja hallinto</span>
+                                        <span class="cert-acc-badge">0</span>
+                                        <span class="cert-acc-arrow">▼</span>
+                                    </button>
+                                    <div class="cert-acc-body">
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Luotettava Kumppani (Vastuu Group)"><span>Luotettava Kumppani (Vastuu Group)</span></label>
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="RALA-pätevyys"><span>RALA-pätevyys</span></label>
+                                    </div>
                                 </div>
-                                <div class="cert-category">
-                                    <div class="cert-cat-title">🔧 Tekninen erikoisosaaminen</div>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Eurofins märkätilat"><span>Eurofins – Märkätilat</span></label>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Eurofins rakenteiden tiiviys/kosteus"><span>Eurofins – Rakenteiden tiiviys/kosteus</span></label>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="AHA-asiantuntija (asbesti)"><span>AHA-asiantuntija (Asbesti)</span></label>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="KVV-pätevyys (putkityöt)"><span>KVV-pätevyys (Putkityöt)</span></label>
-                                    <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Tieturva (maanrakennus)"><span>Tieturva (Maanrakennus)</span></label>
+
+                                <div class="cert-acc-item">
+                                    <button type="button" class="cert-acc-header" onclick="toggleCertCat(this)">
+                                        <span class="cert-acc-title">🔧 Tekninen erikoisosaaminen</span>
+                                        <span class="cert-acc-badge">0</span>
+                                        <span class="cert-acc-arrow">▼</span>
+                                    </button>
+                                    <div class="cert-acc-body">
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Eurofins märkätilat"><span>Eurofins – Märkätilat</span></label>
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Eurofins rakenteiden tiiviys/kosteus"><span>Eurofins – Rakenteiden tiiviys/kosteus</span></label>
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="AHA-asiantuntija (asbesti)"><span>AHA-asiantuntija (Asbesti)</span></label>
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="KVV-pätevyys (putkityöt)"><span>KVV-pätevyys (Putkityöt)</span></label>
+                                        <label class="cert-item"><input type="checkbox" class="patevyys-check" value="Tieturva (maanrakennus)"><span>Tieturva (Maanrakennus)</span></label>
+                                    </div>
                                 </div>
+
                             </div>
                             <input type="hidden" name="patevyydet" id="patevyydet">
                         </div>
@@ -1184,6 +1236,23 @@
             showStep(step);
         }
 
+        // ─── Sertifikaatti-accordion ───────────────────────────────────
+        function toggleCertCat(btn) {
+            const body = btn.nextElementSibling;
+            const isOpen = btn.classList.contains('open');
+            btn.classList.toggle('open', !isOpen);
+            body.classList.toggle('open', !isOpen);
+        }
+
+        document.addEventListener('change', function(e) {
+            if (!e.target.classList.contains('patevyys-check')) return;
+            const body = e.target.closest('.cert-acc-body');
+            const badge = body.previousElementSibling.querySelector('.cert-acc-badge');
+            const count = body.querySelectorAll('.patevyys-check:checked').length;
+            badge.textContent = count;
+            badge.classList.toggle('visible', count > 0);
+        });
+
         // KUVANKÄSITTELY JA PAKKAUS
 
         async function compressImage(file, maxWidth = 1200, maxHeight = 1200, quality = 0.7) {
@@ -1458,6 +1527,7 @@
             // Kootaan pätevyydet-checkboxit hidden inputtiin
             const checkedCerts = [...document.querySelectorAll('.patevyys-check:checked')].map(cb => cb.value);
             document.getElementById('patevyydet').value = checkedCerts.join(', ');
+
 
             document.getElementById('loadingText').textContent = 'Lähetetään tilausta...';
             this.submit();
