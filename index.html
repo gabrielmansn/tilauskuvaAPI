@@ -7,6 +7,137 @@
     <meta name="robots" content="noindex, nofollow">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Roboto:wght@300;400;500&family=Montserrat:wght@300;400;500;600;700;800&family=Cinzel:wght@400;500;600;700&family=Merriweather:wght@300;400;700&family=Lora:wght@400;500;600&family=Great+Vibes&family=Bebas+Neue&family=Raleway:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&family=Ubuntu:wght@300;400;500;700&family=Nunito:wght@300;400;600;700;800&family=Rubik:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Karla:wght@300;400;500;600;700&family=Josefin+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Pacifico&family=Abril+Fatface&family=Righteous&family=Fredoka:wght@300;400;500;600&family=Prata&family=Cormorant:wght@300;400;500;600;700&family=Old+Standard+TT:wght@400;700&family=Cardo:wght@400;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&family=DM+Serif+Display&family=Yeseva+One&family=Josefin+Slab:wght@300;400;500;600;700&family=Zilla+Slab:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Satoshi:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ─── Toimialatyyppi-valinta ─────────────────────────────── */
+        .industry-select {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .industry-card { cursor: pointer; }
+        .industry-card input { display: none; }
+        .industry-card-inner {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: all 0.25s;
+            background: #fafafa;
+        }
+        .industry-card-inner .industry-icon {
+            font-size: 2.4rem;
+            margin-bottom: 0.6rem;
+        }
+        .industry-card-inner .industry-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .industry-card-inner .industry-desc {
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 1.4;
+        }
+        .industry-card input:checked + .industry-card-inner,
+        .industry-card-inner.selected {
+            border-color: var(--primary, #1e3a5f);
+            background: #eef4ff;
+            box-shadow: 0 4px 20px rgba(30,58,95,0.15);
+            transform: translateY(-2px);
+        }
+        .industry-card-inner.palvelu .industry-name { color: #c2185b; }
+        .industry-card-inner.rakennus .industry-name { color: #1e3a5f; }
+        .industry-type-label {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        /* ─── Rakennusala-tyylitortit ──────────────────────────────── */
+        .style-card.vankka {
+            border-color: #4b6cb7;
+            background: linear-gradient(135deg, #eef2fa 0%, #dce5f5 100%);
+        }
+        .style-card.vankka .style-icon {
+            background: linear-gradient(135deg, #1e3a5f 0%, #4b6cb7 100%);
+            color: #f0f4ff; border: 3px solid #4b6cb7; font-size: 1.6rem;
+        }
+        .style-card.vankka .style-name {
+            color: #1e2d3d; font-family: 'Montserrat', sans-serif;
+            font-weight: 800; font-size: 1.15rem; letter-spacing: 0.3px;
+        }
+        .style-card.vankka .style-desc { color: #3a4d5c; }
+        .style-option input:checked + .style-card.vankka {
+            border-color: #1e3a5f;
+            box-shadow: 0 8px 30px rgba(30,58,95,0.25);
+            transform: translateY(-4px);
+        }
+
+        .style-card.teollinen {
+            border-color: #ff6b35; border-radius: 4px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+        }
+        .style-card.teollinen .style-icon {
+            border-radius: 4px;
+            background: linear-gradient(135deg, #ff6b35 0%, #e67e22 100%);
+            color: #1a1a1a; border: 3px solid #ff6b35; font-size: 1.6rem;
+        }
+        .style-card.teollinen .style-name {
+            color: #ff6b35; letter-spacing: 1px; text-transform: uppercase;
+            font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+        }
+        .style-card.teollinen .style-desc { color: #cccccc; }
+        .style-option input:checked + .style-card.teollinen {
+            border-color: #ff6b35;
+            box-shadow: 0 8px 30px rgba(255,107,53,0.35);
+            transform: translateY(-4px);
+        }
+
+        .style-card.ekologinen {
+            border-color: #52b788; border-radius: 8px;
+            background: linear-gradient(135deg, #f0f7f3 0%, #d8eedf 100%);
+        }
+        .style-card.ekologinen .style-icon {
+            background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
+            color: #d8f3dc; border: 3px solid #52b788; font-size: 1.6rem;
+        }
+        .style-card.ekologinen .style-name {
+            color: #1b4332; font-family: 'Merriweather', serif; font-weight: 700;
+        }
+        .style-card.ekologinen .style-desc { color: #2d6a4f; }
+        .style-option input:checked + .style-card.ekologinen {
+            border-color: #2d6a4f;
+            box-shadow: 0 8px 30px rgba(45,106,79,0.25);
+            transform: translateY(-4px);
+        }
+
+        .style-card.kaytannollinen {
+            border-color: #a0522d; border-radius: 6px;
+            background: linear-gradient(135deg, #faf6f2 0%, #ede4d8 100%);
+        }
+        .style-card.kaytannollinen .style-icon {
+            border-radius: 6px;
+            background: linear-gradient(135deg, #a0522d 0%, #cd853f 100%);
+            color: white; font-size: 1.6rem;
+        }
+        .style-card.kaytannollinen .style-name {
+            color: #5d4037; font-family: 'Work Sans', sans-serif;
+            font-weight: 700; font-size: 1.15rem;
+        }
+        .style-card.kaytannollinen .style-desc { color: #6d5547; }
+        .style-option input:checked + .style-card.kaytannollinen {
+            border-color: #a0522d;
+            box-shadow: 0 8px 30px rgba(160,82,45,0.25);
+            transform: translateY(-4px);
+        }
+
+        .style-card .style-icon { font-size: 1.6rem; }
+        @media (max-width: 480px) {
+            .industry-select { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body class="order-page">
 
@@ -86,7 +217,7 @@
                         <div class="form-group">
                             <label for="toimiala">Toimiala <span class="required">*</span></label>
                             <select name="toimiala" id="toimiala" required>
-                                <option value="">Valitse...</option>
+                                <option value="">Valitse ensin ala yllä…</option>
                             </select>
                         </div>
                     </div>
@@ -125,61 +256,9 @@
                 <div class="form-section" data-section="3">
                     <h2 class="section-title">Valitse tyyli</h2>
                     <p class="section-subtitle">Millaisen ilmeen haluat sivuillesi?</p>
-
-                    <div class="style-grid">
-                        <label class="style-option" onclick="selectStyle('klassinen')">
-                            <input type="radio" name="valittu_tyyli" value="Klassinen" required>
-                            <div class="style-card klassinen">
-                                <div class="style-icon">K</div>
-                                <div class="style-name">Klassinen</div>
-                                <div class="style-desc">Ajaton elegance ja perinteinen tyyli. Sopii yrityksille, jotka haluavat luotettavan ja arvokkaan imagon.</div>
-                            </div>
-                        </label>
-
-                        <label class="style-option" onclick="selectStyle('moderni')">
-                            <input type="radio" name="valittu_tyyli" value="Moderni">
-                            <div class="style-card moderni">
-                                <div class="style-icon">M</div>
-                                <div class="style-name">Moderni</div>
-                                <div class="style-desc">Puhtaat linjat ja minimalistinen design. Täydellinen nykyaikaisille yrityksille, jotka arvostavat selkeyttä.</div>
-                            </div>
-                        </label>
-
-                        <label class="style-option" onclick="selectStyle('luksus')">
-                            <input type="radio" name="valittu_tyyli" value="Luksus">
-                            <div class="style-card luksus">
-                                <div class="style-icon">L</div>
-                                <div class="style-name">Luksus</div>
-                                <div class="style-desc">Kultaa, mustaa ja premium-tunnelmaa. Korosta laatua ja eksklusiivisuutta tämän tyylikkään ilmeen avulla.</div>
-                            </div>
-                        </label>
-
-                        <label class="style-option" onclick="selectStyle('kotoisa')">
-                            <input type="radio" name="valittu_tyyli" value="Kotoisa">
-                            <div class="style-card kotoisa">
-                                <div class="style-icon">O</div>
-                                <div class="style-name">Kotoisa</div>
-                                <div class="style-desc">Lämpimiä sävyjä ja kutsuva tunnelma. Ihanteellinen yrityksille, jotka haluavat välittää läheisyyttä ja mukavuutta.</div>
-                            </div>
-                        </label>
-
-                        <label class="style-option" onclick="selectStyle('elegantti')">
-                            <input type="radio" name="valittu_tyyli" value="Elegantti">
-                            <div class="style-card elegantti">
-                                <div class="style-icon">E</div>
-                                <div class="style-name">Elegantti</div>
-                                <div class="style-desc">Hienostunutta kauneutta ja naisellista charmia. Roosaa, kultaa ja pehmeitä muotoja.</div>
-                            </div>
-                        </label>
-
-                        <label class="style-option" onclick="selectStyle('creative')">
-                            <input type="radio" name="valittu_tyyli" value="Luova">
-                            <div class="style-card creative">
-                                <div class="style-icon">L</div>
-                                <div class="style-name">Luova</div>
-                                <div class="style-desc">Rohkeita värejä ja erottuva ilme. Valitse tämä, jos haluat erottua joukosta ja näyttää persoonallisuutesi.</div>
-                            </div>
-                        </label>
+                    
+                    <div class="style-grid" id="styleGrid">
+                        <!-- Täytetään dynaamisesti renderStyles()-funktiolla -->
                     </div>
 
                     <div class="button-group">
@@ -494,6 +573,44 @@
             ],
         };
 
+        // ─── Toimialatyyppi ───────────────────────────────────────────
+
+        const tyylit = {
+            palveluala: [
+                { key: 'klassinen',  value: 'Klassinen',  icon: '✨', name: 'Klassinen',  desc: 'Ajaton eleganssi ja perinteinen tyyli. Luotettava ja arvokas imago, joka kestää aikaa.' },
+                { key: 'moderni',    value: 'Moderni',    icon: '◼',  name: 'Moderni',    desc: 'Puhtaat linjat ja minimalistinen design. Täydellinen yrityksille, jotka arvostavat selkeyttä.' },
+                { key: 'luksus',     value: 'Luksus',     icon: '💎', name: 'Luksus',     desc: 'Kultaa, mustaa ja premium-tunnelmaa. Korosta eksklusiivisuutta ja korkeaa hintatasoa.' },
+                { key: 'kotoisa',    value: 'Kotoisa',    icon: '🌸', name: 'Kotoisa',    desc: 'Lämpimiä sävyjä ja kutsuva tunnelma. Ihanteellinen yrityksille, jotka haluavat tuntua läheiseltä.' },
+                { key: 'elegantti',  value: 'Elegantti',  icon: '🌺', name: 'Elegantti',  desc: 'Hienostunutta kauneutta ja naisellista charmia. Roosaa, kultaa ja pehmeitä muotoja.' },
+                { key: 'creative',   value: 'Luova',      icon: '🎨', name: 'Luova',      desc: 'Rohkeita värejä ja erottuva ilme. Valitse tämä, jos haluat erottua joukosta.' },
+            ],
+            rakennusala: [
+                { key: 'vankka',         value: 'Vankka',             icon: '🧱', name: 'Vankka & Perinteinen', desc: 'Luotettava ja vankkumaton ilme. Sopii perinteiseen rakentamiseen – muuraukseen tai puusepäntyöhön – ja pitkän kokemuksen korostamiseen.' },
+                { key: 'moderni',        value: 'Moderni',            icon: '📐', name: 'Moderni',             desc: 'Terävät linjat ja tekninen viimeistely. Täydellinen uudisrakentajille ja suunnittelutoimistoille, jotka arvostavat selkeyttä.' },
+                { key: 'luksus',         value: 'Luksus',             icon: '💎', name: 'Premium & Luksus',    desc: 'Korkeaa laatua ja eksklusiivisia materiaaleja. Arvokiinteistöt, design-huvilat tai kalliit sisustusremontit.' },
+                { key: 'teollinen',      value: 'Teollinen',          icon: '⚙️', name: 'Teollinen',           desc: 'Voimaa ja suorituskykyä. Erinomainen maanrakennusyrityksille, purkufirmoille tai raskaalle teollisuudelle.' },
+                { key: 'ekologinen',     value: 'Ekologinen',         icon: '🌿', name: 'Ekologinen',          desc: 'Luonnonmukainen ja kestävä. Hirsi- ja puurakentaminen, energiatehokkuus tai ympäristöystävälliset materiaalit.' },
+                { key: 'kaytannollinen', value: 'Käytännönläheinen',  icon: '🔨', name: 'Käytännönläheinen',   desc: 'Helposti lähestyttävä ja ihmisläheinen. Paikallisille remonttiyrityksille – suoraa kommunikaatiota ja avaimet käteen -palvelua.' },
+            ],
+        };
+
+        function renderStyles() {
+            const grid = document.getElementById('styleGrid');
+            const styles = tyylit[selectedIndustry] || tyylit.palveluala;
+            selectedStyle = null;
+            document.getElementById('tyyliSeuraava').disabled = true;
+            grid.innerHTML = styles.map(s => `
+                <label class="style-option" onclick="selectStyle('${s.key}')">
+                    <input type="radio" name="valittu_tyyli" value="${s.value}" required>
+                    <div class="style-card ${s.key}">
+                        <div class="style-icon">${s.icon}</div>
+                        <div class="style-name">${s.name}</div>
+                        <div class="style-desc">${s.desc}</div>
+                    </div>
+                </label>
+            `).join('');
+        }
+
         // Laajennettu fonttikokoelma
         const fontit = {
             klassinen: [
@@ -579,6 +696,63 @@
                 { nimi: 'Outfit', esimerkki: 'Aa', class: 'Outfit' },
                 { nimi: 'Sora', esimerkki: 'Aa', class: 'Sora' },
                 { nimi: 'Plus Jakarta Sans', esimerkki: 'Aa', class: 'Plus Jakarta Sans' }
+            ],
+            // ─── Rakennusala-fontit ───────────────────────────────────
+            vankka: [
+                { nimi: 'Oswald', esimerkki: 'Aa', class: 'Oswald' },
+                { nimi: 'Montserrat', esimerkki: 'Aa', class: 'Montserrat' },
+                { nimi: 'Barlow Condensed', esimerkki: 'Aa', class: 'Barlow Condensed' },
+                { nimi: 'Raleway', esimerkki: 'Aa', class: 'Raleway' },
+                { nimi: 'Merriweather', esimerkki: 'Aa', class: 'Merriweather' },
+                { nimi: 'Libre Baskerville', esimerkki: 'Aa', class: 'Libre Baskerville' },
+                { nimi: 'Lora', esimerkki: 'Aa', class: 'Lora' },
+                { nimi: 'Work Sans', esimerkki: 'Aa', class: 'Work Sans' },
+                { nimi: 'Roboto', esimerkki: 'Aa', class: 'Roboto' },
+                { nimi: 'PT Serif', esimerkki: 'Aa', class: 'PT Serif' },
+                { nimi: 'Playfair Display', esimerkki: 'Aa', class: 'Playfair Display' },
+                { nimi: 'DM Serif Display', esimerkki: 'Aa', class: 'DM Serif Display' }
+            ],
+            teollinen: [
+                { nimi: 'Bebas Neue', esimerkki: 'Aa', class: 'Bebas Neue' },
+                { nimi: 'Barlow Condensed', esimerkki: 'Aa', class: 'Barlow Condensed' },
+                { nimi: 'Oswald', esimerkki: 'Aa', class: 'Oswald' },
+                { nimi: 'Anton', esimerkki: 'Aa', class: 'Anton' },
+                { nimi: 'Teko', esimerkki: 'Aa', class: 'Teko' },
+                { nimi: 'Rajdhani', esimerkki: 'Aa', class: 'Rajdhani' },
+                { nimi: 'Roboto Condensed', esimerkki: 'Aa', class: 'Roboto Condensed' },
+                { nimi: 'Black Han Sans', esimerkki: 'Aa', class: 'Black Han Sans' },
+                { nimi: 'Montserrat', esimerkki: 'Aa', class: 'Montserrat' },
+                { nimi: 'Work Sans', esimerkki: 'Aa', class: 'Work Sans' },
+                { nimi: 'Saira Condensed', esimerkki: 'Aa', class: 'Saira Condensed' },
+                { nimi: 'Exo 2', esimerkki: 'Aa', class: 'Exo 2' }
+            ],
+            ekologinen: [
+                { nimi: 'Lora', esimerkki: 'Aa', class: 'Lora' },
+                { nimi: 'Merriweather', esimerkki: 'Aa', class: 'Merriweather' },
+                { nimi: 'Libre Baskerville', esimerkki: 'Aa', class: 'Libre Baskerville' },
+                { nimi: 'Nunito', esimerkki: 'Aa', class: 'Nunito' },
+                { nimi: 'Josefin Slab', esimerkki: 'Aa', class: 'Josefin Slab' },
+                { nimi: 'Zilla Slab', esimerkki: 'Aa', class: 'Zilla Slab' },
+                { nimi: 'PT Serif', esimerkki: 'Aa', class: 'PT Serif' },
+                { nimi: 'Cardo', esimerkki: 'Aa', class: 'Cardo' },
+                { nimi: 'EB Garamond', esimerkki: 'Aa', class: 'EB Garamond' },
+                { nimi: 'Cabin', esimerkki: 'Aa', class: 'Cabin' },
+                { nimi: 'Frank Ruhl Libre', esimerkki: 'Aa', class: 'Frank Ruhl Libre' },
+                { nimi: 'Playfair Display', esimerkki: 'Aa', class: 'Playfair Display' }
+            ],
+            kaytannollinen: [
+                { nimi: 'Open Sans', esimerkki: 'Aa', class: 'Open Sans' },
+                { nimi: 'Roboto', esimerkki: 'Aa', class: 'Roboto' },
+                { nimi: 'Ubuntu', esimerkki: 'Aa', class: 'Ubuntu' },
+                { nimi: 'Nunito', esimerkki: 'Aa', class: 'Nunito' },
+                { nimi: 'Source Sans Pro', esimerkki: 'Aa', class: 'Source Sans Pro' },
+                { nimi: 'Karla', esimerkki: 'Aa', class: 'Karla' },
+                { nimi: 'Rubik', esimerkki: 'Aa', class: 'Rubik' },
+                { nimi: 'Work Sans', esimerkki: 'Aa', class: 'Work Sans' },
+                { nimi: 'Manrope', esimerkki: 'Aa', class: 'Manrope' },
+                { nimi: 'Barlow', esimerkki: 'Aa', class: 'Barlow' },
+                { nimi: 'Cabin', esimerkki: 'Aa', class: 'Cabin' },
+                { nimi: 'Hind', esimerkki: 'Aa', class: 'Hind' }
             ]
         };
 
@@ -630,6 +804,39 @@
                 { nimi: 'Turkoosi & Koralli', gradient: 'linear-gradient(135deg, #40e0d0 0%, #ff7f50 100%)' },
                 { nimi: 'Neonvihreä & Musta', gradient: 'linear-gradient(135deg, #39ff14 0%, #1a1a1a 100%)' },
                 { nimi: 'Magenta & Syaani', gradient: 'linear-gradient(135deg, #ff00ff 0%, #00ffff 100%)' }
+            ],
+            // ─── Rakennusala-värit ────────────────────────────────────
+            vankka: [
+                { nimi: 'Tumma sininen & Harmaa', gradient: 'linear-gradient(135deg, #1e3a5f 0%, #6b7280 100%)' },
+                { nimi: 'Laivastonsininen & Kerma', gradient: 'linear-gradient(135deg, #1e3a5f 0%, #f5f0e8 100%)' },
+                { nimi: 'Tiilenpunainen & Tummanharmaa', gradient: 'linear-gradient(135deg, #8b2635 0%, #3d3d3d 100%)' },
+                { nimi: 'Antrasiitti & Sininen', gradient: 'linear-gradient(135deg, #2d3436 0%, #2980b9 100%)' },
+                { nimi: 'Tummanharmaa & Tiili', gradient: 'linear-gradient(135deg, #374151 0%, #c0392b 100%)' },
+                { nimi: 'Harmaansininen & Valkoinen', gradient: 'linear-gradient(135deg, #4b6cb7 0%, #f5f5f5 100%)' }
+            ],
+            teollinen: [
+                { nimi: 'Turva-oranssi & Tummanharmaa', gradient: 'linear-gradient(135deg, #ff6b35 0%, #2d3436 100%)' },
+                { nimi: 'Keltainen & Musta', gradient: 'linear-gradient(135deg, #f1c40f 0%, #1a1a1a 100%)' },
+                { nimi: 'Oranssi & Antrasiitti', gradient: 'linear-gradient(135deg, #e67e22 0%, #374151 100%)' },
+                { nimi: 'Betoninharmaa & Oranssi', gradient: 'linear-gradient(135deg, #95a5a6 0%, #d35400 100%)' },
+                { nimi: 'Musta & Varoituskeltainen', gradient: 'linear-gradient(135deg, #2c3e50 0%, #f39c12 100%)' },
+                { nimi: 'Siniharmaa & Tulioranssi', gradient: 'linear-gradient(135deg, #5d6d7e 0%, #e74c3c 100%)' }
+            ],
+            ekologinen: [
+                { nimi: 'Metsänvihreä & Beige', gradient: 'linear-gradient(135deg, #2d6a4f 0%, #f2e8d9 100%)' },
+                { nimi: 'Puunruskea & Kerma', gradient: 'linear-gradient(135deg, #6b4423 0%, #f5f0e8 100%)' },
+                { nimi: 'Syvänvihreä & Valkoinen', gradient: 'linear-gradient(135deg, #1b4332 0%, #ffffff 100%)' },
+                { nimi: 'Oliivi & Hiekka', gradient: 'linear-gradient(135deg, #606c38 0%, #dda15e 100%)' },
+                { nimi: 'Männynvihreä & Ruskea', gradient: 'linear-gradient(135deg, #3d6b57 0%, #8b6239 100%)' },
+                { nimi: 'Koivunvalkoinen & Vihreä', gradient: 'linear-gradient(135deg, #f0f4e8 0%, #4a7c59 100%)' }
+            ],
+            kaytannollinen: [
+                { nimi: 'Hiekanruskea & Terrakotta', gradient: 'linear-gradient(135deg, #c9a87c 0%, #a0522d 100%)' },
+                { nimi: 'Lämmin beige & Tummanruskea', gradient: 'linear-gradient(135deg, #e8d5b7 0%, #5d4037 100%)' },
+                { nimi: 'Savenharmaa & Tiilenpunainen', gradient: 'linear-gradient(135deg, #9e9e9e 0%, #bf4040 100%)' },
+                { nimi: 'Kivenharmaa & Oranssinruskea', gradient: 'linear-gradient(135deg, #78909c 0%, #bf6630 100%)' },
+                { nimi: 'Vaalea beige & Antrasiitti', gradient: 'linear-gradient(135deg, #f5e6d0 0%, #455a64 100%)' },
+                { nimi: 'Hiekanvaalea & Siniharmaa', gradient: 'linear-gradient(135deg, #deb887 0%, #607d8b 100%)' }
             ]
         };
 
@@ -890,6 +1097,7 @@
             if (!valid) return;
 
             if (currentStep === 1) generateToimiala();
+            if (currentStep === 2) renderStyles();
             if (currentStep === 3) generateFonts();
             if (currentStep === 4) generateColors();
 
